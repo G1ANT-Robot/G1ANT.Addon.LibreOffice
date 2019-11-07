@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29326.143
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G1ANT.Addon.LibreOffice", "G1ANT.Addon.LibreOffice.csproj", "{99627C0E-3663-4979-BBAC-AC994BC1B5AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99627C0E-3663-4979-BBAC-AC994BC1B5AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99627C0E-3663-4979-BBAC-AC994BC1B5AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99627C0E-3663-4979-BBAC-AC994BC1B5AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99627C0E-3663-4979-BBAC-AC994BC1B5AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E44DA019-54A2-4C6D-A2A2-7329DF4B0E8B}
+	EndGlobalSection
+EndGlobal

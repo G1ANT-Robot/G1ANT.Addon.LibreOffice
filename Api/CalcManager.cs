@@ -29,7 +29,7 @@ namespace G1ANT.Addon.LibreOffice
             }
         }
 
-        public static void SwitchExcel(int id)
+        public static void SwitchCalc(int id)
         {
             CalcWrapper instanceToSwitchTo = launchedCalcs.Where(x => x.Id == id).FirstOrDefault();
             if (instanceToSwitchTo == null)

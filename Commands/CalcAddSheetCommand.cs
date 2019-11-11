@@ -17,11 +17,14 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
+            [Argument(Tooltip = "Name of the Sheet to Add", Required = true)]
+
             public TextStructure sheetName { get; set; }
         }
 
         public void Execute(Arguments arguments)
         {
+
             CalcManager.CurrentCalc.AddSheet(arguments.sheetName.Value);
         }
     }

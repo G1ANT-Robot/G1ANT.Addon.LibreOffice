@@ -7,7 +7,7 @@ using unoidl.com.sun.star.lang;
 using unoidl.com.sun.star.uno;
 using unoidl.com.sun.star.bridge;
 using unoidl.com.sun.star.frame;
-
+using G1ANT.Language;
 
 namespace G1ANT.Addon.LibreOffice
 {
@@ -79,14 +79,34 @@ namespace G1ANT.Addon.LibreOffice
 
         private void SaveDocument(String Path)
         {
-            Path = String.Format("file:///{0}", Path);
+            try
+            {
+                Path = String.Format("file:///{0}", Path);
+                XStorable xStorable = (XStorable)mxDocument; // Type cast the currently open document to XStorable type.
+                xStorable.storeToURL(Path, new unoidl.com.sun.star.beans.PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                RobotMessageBox.Show($"An Error occured! Failed to Save the document: [{ex.Message}, [{ex.Source}]");
+                throw ex;
+            }
+
         }
 
         private void AddNewSheet(String Name)
         {
-            unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
-            short sheetIndex = Convert.ToInt16(xSheets.getElementNames().Length + 1); //Get the number of sheets already existing in the document, add one to get the new index. 
-            xSheets.insertNewByName(Name, sheetIndex);
+            try
+            {
+                unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
+                short sheetIndex = Convert.ToInt16(xSheets.getElementNames().Length + 1); //Get the number of sheets already existing in the document, add one to get the new index. 
+                xSheets.insertNewByName(Name, sheetIndex);
+            }
+
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                RobotMessageBox.Show($"An Error occured: [{ex.Message}, [{ex.Source}]");
+                throw ex;
+            }
         }
 
         private XMultiServiceFactory Connect()
@@ -103,7 +123,7 @@ namespace G1ANT.Addon.LibreOffice
 
         public void Save(String Path)
         {
-
+            SaveDocument(Path);
         }
 
         public void AddSheet(String Name)

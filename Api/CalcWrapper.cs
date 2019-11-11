@@ -8,6 +8,7 @@ using unoidl.com.sun.star.uno;
 using unoidl.com.sun.star.bridge;
 using unoidl.com.sun.star.frame;
 
+
 namespace G1ANT.Addon.LibreOffice
 {
     public class CalcWrapper
@@ -76,6 +77,18 @@ namespace G1ANT.Addon.LibreOffice
             return (unoidl.com.sun.star.sheet.XSpreadsheetDocument)xComponent;
         }
 
+        private void SaveDocument(String Path)
+        {
+            Path = String.Format("file:///{0}", Path);
+        }
+
+        private void AddNewSheet(String Name)
+        {
+            unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
+            short sheetIndex = Convert.ToInt16(xSheets.getElementNames().Length + 1); //Get the number of sheets already existing in the document, add one to get the new index. 
+            xSheets.insertNewByName(Name, sheetIndex);
+        }
+
         private XMultiServiceFactory Connect()
         {
             m_xContext = uno.util.Bootstrap.bootstrap();
@@ -86,6 +99,16 @@ namespace G1ANT.Addon.LibreOffice
         {
             mxDocument = InitDocument(Hidden, Path);
             return this.Id;
+        }
+
+        public void Save(String Path)
+        {
+
+        }
+
+        public void AddSheet(String Name)
+        {
+            AddNewSheet(Name);
         }
     }
 }

@@ -87,8 +87,7 @@ namespace G1ANT.Addon.LibreOffice
         {
             try
             {
-                //Path = String.Format("file:///{0}", Path);
-                Path = Path.Replace("\\", "/");
+                Path = Path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
                 Path = String.Concat("file:///", Path);
                 XStorable xStorable = (XStorable)mxDocument; // Typecast the currently open document to XStorable type.
                 xStorable.storeToURL(Path, new unoidl.com.sun.star.beans.PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
@@ -116,6 +115,24 @@ namespace G1ANT.Addon.LibreOffice
             }
         }
 
+        private void SetActiveSheet(String sheetName)
+        {
+            try
+            {
+                unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
+                unoidl.com.sun.star.frame.XModel xModel = (unoidl.com.sun.star.frame.XModel)mxDocument;
+                unoidl.com.sun.star.frame.XController xController = xModel.getCurrentController();
+                unoidl.com.sun.star.sheet.XSpreadsheetView sheetView = (unoidl.com.sun.star.sheet.XSpreadsheetView)xController;
+                unoidl.com.sun.star.sheet.XSpreadsheet xSpreadsheet = (unoidl.com.sun.star.sheet.XSpreadsheet)xSheets.getByName(sheetName).Value;
+                sheetView.setActiveSheet(xSpreadsheet);
+            }
+           catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                //RobotMessageBox.Show(ex.Message);
+                throw ex;
+            }
+        }
+
         private XMultiServiceFactory Connect()
         {
             m_xContext = uno.util.Bootstrap.bootstrap();
@@ -133,9 +150,30 @@ namespace G1ANT.Addon.LibreOffice
             SaveDocument(Path);
         }
 
+        public void Close()
+        {
+            XDesktop xDesktop = (XDesktop)m_xContext.getServiceManager().createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
+            xDesktop.terminate();
+        }
+
         public void AddSheet(String Name)
         {
             AddNewSheet(Name);
+        }
+
+        public void ActivateSheet(String sheetName)
+        {
+            SetActiveSheet(sheetName);
+        }
+
+        public String GetValue()
+        {
+            return "1";
+        }
+
+        public void SetValue()
+        {
+
         }
     }
 }

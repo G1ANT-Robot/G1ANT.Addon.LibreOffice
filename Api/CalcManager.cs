@@ -59,7 +59,7 @@ namespace G1ANT.Addon.LibreOffice
             if (toRemove != null)
             {
                 launchedCalcs.Remove(toRemove);
-                //toRemove.Close();
+                toRemove.Close();
             }
             else
             {

@@ -108,7 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Addon.cs" />
+    <Compile Include="Commands\CalcActivateSheetCommand.cs" />
     <Compile Include="Commands\CalcAddSheetCommand.cs" />
+    <Compile Include="Commands\CalcCloseCommand.cs" />
     <Compile Include="Commands\CalcSaveCommand.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

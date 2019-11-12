@@ -18,9 +18,11 @@ namespace G1ANT.Addon.LibreOffice
         {
             [Argument(Tooltip = "Whether to open the file in hidden mode", Required = true)]
             public BooleanStructure Hidden { get; set; } = new BooleanStructure(false);
+
             [Argument(Tooltip = "Path of an existing file to open, if left empty, creates a new document", Required = false)]
-            public TextStructure path {get; set;}
-            [Argument(Tooltip = "Contains ID of the opened Instance, can be used with calc.switch", Required = true)]
+            public TextStructure path { get; set; } = new TextStructure();
+
+            [Argument(Tooltip = "Contains ID of the opened Instance, can be used with calc.switch")]
             public VariableStructure Result { get; set;} = new VariableStructure("result");
         }
 

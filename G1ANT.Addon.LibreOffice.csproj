@@ -12,6 +12,7 @@
     <AssemblyName>G1ANT.Addon.LibreOffice</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -93,15 +94,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MailKit, Version=2.1.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
-      <HintPath>packages\MailKit.2.4.0.1\lib\net47\MailKit.dll</HintPath>
+      <HintPath>packages\MailKit.2.4.1\lib\net47\MailKit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MimeKit, Version=2.1.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
-      <HintPath>packages\MimeKit.2.4.0.1\lib\net47\MimeKit.dll</HintPath>
+      <HintPath>packages\MimeKit.2.4.1\lib\net47\MimeKit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -142,6 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="bin\Debug\cli_uretypes.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="License.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

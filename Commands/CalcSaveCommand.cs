@@ -18,12 +18,12 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Tooltip = "Where to save the file", Required = true)]
-            public TextStructure path { get; set; }
+            public TextStructure savepath { get; set; } = new TextStructure();
         }
 
-        void Execute(Arguments arguments)
+        public void Execute(Arguments arguments)
         { 
-            CalcManager.CurrentCalc.Save(arguments.path.Value);
+            CalcManager.CurrentCalc.Save(arguments.savepath.Value);
         }
     }
 }

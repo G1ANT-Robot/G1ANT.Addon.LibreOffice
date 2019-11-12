@@ -19,7 +19,7 @@ namespace G1ANT.Addon.LibreOffice
             {
                 if (currentCalc == null)
                 {
-                    throw new ApplicationException("Excel instance must be opened first using excel.open command");
+                    throw new ApplicationException("Calc instance must be opened first using excel.open command");
                 }
                 return currentCalc;
             }
@@ -32,11 +32,7 @@ namespace G1ANT.Addon.LibreOffice
         public static void SwitchCalc(int id)
         {
             CalcWrapper instanceToSwitchTo = launchedCalcs.Where(x => x.Id == id).FirstOrDefault();
-            if (instanceToSwitchTo == null)
-            {
-                throw new ArgumentException($"No Calc instance found with id: {id}");
-            }
-            CurrentCalc = instanceToSwitchTo;
+            CurrentCalc = instanceToSwitchTo ?? throw new ArgumentException($"No Calc instance found with id: {id}");
         }
 
         private static int GetNextId()

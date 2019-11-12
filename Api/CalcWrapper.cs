@@ -29,13 +29,17 @@ namespace G1ANT.Addon.LibreOffice
             mxMSFactory = Connect();
             XComponentLoader aLoader = (XComponentLoader)mxMSFactory.createInstance("com.sun.star.frame.Desktop");
             XComponent xComponent;
+            unoidl.com.sun.star.beans.PropertyValue[] loadProperties = new unoidl.com.sun.star.beans.PropertyValue[2];
+            loadProperties[0] = new unoidl.com.sun.star.beans.PropertyValue();
+            loadProperties[1] = new unoidl.com.sun.star.beans.PropertyValue();
+            loadProperties[1].Name = "ReadOnly";
+            loadProperties[1].Value = new uno.Any(false);
 
             if (Hidden)
             {
-                unoidl.com.sun.star.beans.PropertyValue[] loadProperties = new unoidl.com.sun.star.beans.PropertyValue[1];
-                loadProperties[0] = new unoidl.com.sun.star.beans.PropertyValue();
                 loadProperties[0].Name = "Hidden";
                 loadProperties[0].Value = new uno.Any(true);
+
                 //Check to see if the path is provided by the user, if it's empty, create a new document. 
                 if (String.IsNullOrEmpty(Path))
                 {
@@ -56,6 +60,8 @@ namespace G1ANT.Addon.LibreOffice
             }
             else
             {
+                loadProperties[0].Name = "Hidden";
+                loadProperties[0].Value = new uno.Any(false);
                 if (String.IsNullOrEmpty(Path))
                 {
                     xComponent = aLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, new unoidl.com.sun.star.beans.PropertyValue[0]);
@@ -81,13 +87,14 @@ namespace G1ANT.Addon.LibreOffice
         {
             try
             {
-                Path = String.Format("file:///{0}", Path);
-                XStorable xStorable = (XStorable)mxDocument; // Type cast the currently open document to XStorable type.
+                //Path = String.Format("file:///{0}", Path);
+                Path = Path.Replace("\\", "/");
+                Path = String.Concat("file:///", Path);
+                XStorable xStorable = (XStorable)mxDocument; // Typecast the currently open document to XStorable type.
                 xStorable.storeToURL(Path, new unoidl.com.sun.star.beans.PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
             }
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                RobotMessageBox.Show($"An Error occured! Failed to Save the document: [{ex.Message}, [{ex.Source}]");
                 throw ex;
             }
 

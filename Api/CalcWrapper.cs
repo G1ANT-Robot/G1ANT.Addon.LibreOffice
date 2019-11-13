@@ -152,8 +152,19 @@ namespace G1ANT.Addon.LibreOffice
 
         public void Close()
         {
-            XDesktop xDesktop = (XDesktop)m_xContext.getServiceManager().createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
-            xDesktop.terminate();
+            try
+            {
+                //XDesktop xDesktop = (XDesktop)m_xContext.getServiceManager().createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
+                //xDesktop.terminate();
+                XModel xModel = (XModel)mxDocument;
+                unoidl.com.sun.star.util.XCloseable xCloseable = (unoidl.com.sun.star.util.XCloseable)xModel;
+                xCloseable.close(true);
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public void AddSheet(String Name)
@@ -166,14 +177,36 @@ namespace G1ANT.Addon.LibreOffice
             SetActiveSheet(sheetName);
         }
 
-        public String GetValue()
+        public String GetValue(String sheetName, int colNum, int rowNum)
         {
-            return "1";
+            try
+            {
+                var xSheets = mxDocument.getSheets();
+                var xSheet = (unoidl.com.sun.star.sheet.XSpreadsheet)xSheets.getByName(sheetName).Value;
+                var xCell = (unoidl.com.sun.star.text.XText)xSheet.getCellByPosition(colNum - 1, rowNum - 1);
+                String Value = xCell.getString();
+                return Value;
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public void SetValue()
+        public void SetValue(String Value, String sheetName, int colNum, int rowNum)
         {
-
+            try
+            {
+                var xSheets = mxDocument.getSheets();
+                var xSheet = (unoidl.com.sun.star.sheet.XSpreadsheet)xSheets.getByName(sheetName).Value;
+                var xCell = (unoidl.com.sun.star.text.XText)xSheet.getCellByPosition(colNum - 1, rowNum -1 );
+                unoidl.com.sun.star.text.XTextCursor xTextCursor = xCell.createTextCursor();
+                xTextCursor.setString(Value);
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

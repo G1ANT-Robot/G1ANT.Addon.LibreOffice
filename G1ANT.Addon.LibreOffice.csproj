@@ -111,7 +111,10 @@
     <Compile Include="Commands\CalcActivateSheetCommand.cs" />
     <Compile Include="Commands\CalcAddSheetCommand.cs" />
     <Compile Include="Commands\CalcCloseCommand.cs" />
+    <Compile Include="Commands\CalcGetValueCommand.cs" />
     <Compile Include="Commands\CalcSaveCommand.cs" />
+    <Compile Include="Commands\CalcSetValueCommand.cs" />
+    <Compile Include="Commands\CalcSwitchCommand.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

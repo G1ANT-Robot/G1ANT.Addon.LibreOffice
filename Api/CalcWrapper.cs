@@ -52,9 +52,9 @@ namespace G1ANT.Addon.LibreOffice
                         Path = String.Format("file:///{0}", Path);
                         xComponent = aLoader.loadComponentFromURL(Path, "_blank", 0, loadProperties);
                     }
-                    catch
+                    catch (unoidl.com.sun.star.uno.Exception ex)
                     {
-                        throw new unoidl.com.sun.star.io.IOException($"Failed to open file [{Path}]", this);
+                        throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
                     }
                 }
             }
@@ -73,9 +73,9 @@ namespace G1ANT.Addon.LibreOffice
                         Path = String.Format("file:///{0}", Path);
                         xComponent = aLoader.loadComponentFromURL(Path, "_blank", 0, new unoidl.com.sun.star.beans.PropertyValue[0]);
                     }
-                    catch
+                    catch (unoidl.com.sun.star.uno.Exception ex)
                     {
-                        throw new unoidl.com.sun.star.io.IOException($"Failed to open file: [{Path}]", this);
+                        throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace G1ANT.Addon.LibreOffice
             }
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                throw ex;
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
 
         }
@@ -110,10 +110,23 @@ namespace G1ANT.Addon.LibreOffice
 
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                RobotMessageBox.Show($"An Error occured: [{ex.Message}, [{ex.Source}]");
-                throw ex;
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
         }
+
+        public void RemoveSheet(String Name)
+        {
+            try
+            {
+                unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
+                xSheets.removeByName(Name);
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+            }
+        }
+
 
         private void SetActiveSheet(String sheetName)
         {
@@ -128,9 +141,15 @@ namespace G1ANT.Addon.LibreOffice
             }
            catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                //RobotMessageBox.Show(ex.Message);
-                throw ex;
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
+        }
+        private unoidl.com.sun.star.sheet.XSpreadsheet GetActiveSheet()
+        {
+            unoidl.com.sun.star.frame.XModel xModel = (unoidl.com.sun.star.frame.XModel)mxDocument;
+            unoidl.com.sun.star.frame.XController xController = xModel.getCurrentController();
+            unoidl.com.sun.star.sheet.XSpreadsheetView sheetView = (unoidl.com.sun.star.sheet.XSpreadsheetView)xController;
+            return sheetView.getActiveSheet();
         }
 
         private XMultiServiceFactory Connect()
@@ -162,7 +181,7 @@ namespace G1ANT.Addon.LibreOffice
             }
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                throw ex;
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
 
         }
@@ -189,7 +208,7 @@ namespace G1ANT.Addon.LibreOffice
             }
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                throw ex;
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
         }
 
@@ -205,7 +224,84 @@ namespace G1ANT.Addon.LibreOffice
             }
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
-                throw ex;
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+            }
+        }
+
+        public void InsertRow(int rowNumber, bool before)
+        {
+            try
+            {
+                var xSheet = GetActiveSheet();
+                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
+                var xRows = xCRRange.getRows();
+                if (before)
+                {
+                    xRows.insertByIndex(rowNumber - 1, 1);
+                }
+                else
+                {
+                    xRows.insertByIndex(rowNumber, 1);
+                }
+                    
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+            }
+        }
+
+        public void InsertColumn(int colNumber, bool before)
+        {
+            try
+            {
+                var xSheet = GetActiveSheet();
+                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
+                var xColumns = xCRRange.getColumns();
+                if (before)
+                {
+                    xColumns.insertByIndex(colNumber - 1, 1);
+                }
+                else
+                {
+                    xColumns.insertByIndex(colNumber, 1);
+                }
+            }
+            catch (unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+            }
+        }
+
+        public void RemoveRow(int rowNumber)
+        {
+            try
+            {
+                var xSheet = GetActiveSheet();
+                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
+                var xRows = xCRRange.getRows();
+                xRows.removeByIndex(rowNumber - 1, 1);
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+
+            }
+        }
+
+        public void RemoveColumn(int colNumber)
+        {
+            try
+            {
+                var xSheet = GetActiveSheet();
+                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
+                var xColumns = (unoidl.com.sun.star.table.XTableColumns)xCRRange.getColumns();
+                xColumns.removeByIndex(colNumber - 1, 1);
+            }
+            catch (unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+
             }
         }
     }

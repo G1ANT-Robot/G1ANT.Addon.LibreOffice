@@ -19,7 +19,7 @@ namespace G1ANT.Addon.LibreOffice
             {
                 if (currentCalc == null)
                 {
-                    throw new ApplicationException("Calc instance must be opened first using excel.open command");
+                    throw new ApplicationException("Calc instance must be opened first using calc.open command");
                 }
                 return currentCalc;
             }

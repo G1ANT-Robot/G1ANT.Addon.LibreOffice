@@ -54,23 +54,23 @@
   <ItemGroup>
     <Reference Include="cli_basetypes, Version=1.0.20.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibreOffice\sdk\cli\cli_basetypes.dll</HintPath>
+      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_basetypes.dll</HintPath>
     </Reference>
     <Reference Include="cli_cppuhelper, Version=1.0.23.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibreOffice\sdk\cli\cli_cppuhelper.dll</HintPath>
+      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_cppuhelper.dll</HintPath>
     </Reference>
     <Reference Include="cli_oootypes, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibreOffice\sdk\cli\cli_oootypes.dll</HintPath>
+      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_oootypes.dll</HintPath>
     </Reference>
     <Reference Include="cli_ure, Version=1.0.23.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibreOffice\sdk\cli\cli_ure.dll</HintPath>
+      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_ure.dll</HintPath>
     </Reference>
     <Reference Include="cli_uretypes, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\LibreOffice\sdk\cli\cli_uretypes.dll</HintPath>
+      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_uretypes.dll</HintPath>
     </Reference>
     <Reference Include="G1ANT.Language, Version=4.104.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\G1ANT.Language.4.104.0\lib\net452\G1ANT.Language.dll</HintPath>
@@ -112,6 +112,11 @@
     <Compile Include="Commands\CalcAddSheetCommand.cs" />
     <Compile Include="Commands\CalcCloseCommand.cs" />
     <Compile Include="Commands\CalcGetValueCommand.cs" />
+    <Compile Include="Commands\CalcInsertColumnCommand.cs" />
+    <Compile Include="Commands\CalcInsertRowCommand.cs" />
+    <Compile Include="Commands\CalcRemoveColumnCommand.cs" />
+    <Compile Include="Commands\CalcRemoveRowCommand.cs" />
+    <Compile Include="Commands\CalcRemoveSheetCommand.cs" />
     <Compile Include="Commands\CalcSaveCommand.cs" />
     <Compile Include="Commands\CalcSetValueCommand.cs" />
     <Compile Include="Commands\CalcSwitchCommand.cs" />

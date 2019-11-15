@@ -17,7 +17,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Tooltip = "Name of the Sheet to Add", Required = true)]
+            [Argument(Name = "sheetname", Tooltip = "Name of the Sheet to Add", Required = true)]
 
             public TextStructure sheetName { get; set; } = new TextStructure();
         }

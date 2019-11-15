@@ -157,15 +157,30 @@ namespace G1ANT.Addon.LibreOffice
 
         public String GetText()
         {
-            unoidl.com.sun.star.text.XText xText = mxDocument.getText();
-            return xText.getString();
+            try
+            {
+                unoidl.com.sun.star.text.XText xText = mxDocument.getText();
+                return xText.getString();
+            }
+
+            catch (unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+            }
         }
         
         public void ReplaceWith(String word, String replaceWith)
         {
-            unoidl.com.sun.star.text.XText xText = mxDocument.getText();
-            var text = xText.getString();
-            xText.setString(text.Replace(word, replaceWith));
+            try
+            {
+                unoidl.com.sun.star.text.XText xText = mxDocument.getText();
+                var text = xText.getString();
+                xText.setString(text.Replace(word, replaceWith));
+            }
+            catch(unoidl.com.sun.star.uno.Exception ex)
+            {
+                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+            }
         }
     }
 }

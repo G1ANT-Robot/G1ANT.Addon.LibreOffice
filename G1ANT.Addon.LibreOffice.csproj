@@ -120,6 +120,13 @@
     <Compile Include="Commands\CalcSaveCommand.cs" />
     <Compile Include="Commands\CalcSetValueCommand.cs" />
     <Compile Include="Commands\CalcSwitchCommand.cs" />
+    <Compile Include="Commands\WriterCloseCommand.cs" />
+    <Compile Include="Commands\WriterGetTextCommand.cs" />
+    <Compile Include="Commands\WriterInsertTextCommand.cs" />
+    <Compile Include="Commands\WriterOpenCommand.cs" />
+    <Compile Include="Commands\WriterReplaceCommand.cs" />
+    <Compile Include="Commands\WriterSaveCommand.cs" />
+    <Compile Include="Commands\WriterSwitchCommand.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

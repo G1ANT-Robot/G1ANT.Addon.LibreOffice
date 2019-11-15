@@ -173,8 +173,6 @@ namespace G1ANT.Addon.LibreOffice
         {
             try
             {
-                //XDesktop xDesktop = (XDesktop)m_xContext.getServiceManager().createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
-                //xDesktop.terminate();
                 XModel xModel = (XModel)mxDocument;
                 unoidl.com.sun.star.util.XCloseable xCloseable = (unoidl.com.sun.star.util.XCloseable)xModel;
                 xCloseable.close(true);
@@ -183,7 +181,6 @@ namespace G1ANT.Addon.LibreOffice
             {
                 throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
-
         }
 
         public void AddSheet(String Name)

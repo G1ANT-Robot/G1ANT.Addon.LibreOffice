@@ -20,12 +20,12 @@ namespace G1ANT.Addon.LibreOffice.Commands
             [Argument(Name = "word", Tooltip = "Enter the word to replace", Required = true)]
             public TextStructure word { get; set; } = new TextStructure();
             [Argument(Name = "replacewith", Tooltip = "Enter the word to replace with", Required = true)]
-            public TextStructure replaceWith { get; set; } = new TextStructure();
+            public TextStructure ReplaceWith { get; set; } = new TextStructure();
         }
 
         public void Execute(Arguments arguments)
         {
-            WriterManager.CurrentWriter.ReplaceWith(arguments.word.Value, arguments.replaceWith.Value);
+            WriterManager.CurrentWriter.ReplaceWith(arguments.word.Value, arguments.ReplaceWith.Value);
         }
     }
 }

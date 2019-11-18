@@ -117,20 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cli_basetypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\cli_basetypes.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cli_cppuhelper" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\cli_cppuhelper.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cli_oootypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\cli_oootypes.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cli_ure" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\cli_ure.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cli_uretypes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\cli_uretypes.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>

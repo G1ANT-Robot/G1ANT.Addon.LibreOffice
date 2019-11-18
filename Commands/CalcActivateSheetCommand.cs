@@ -18,12 +18,12 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "sheet", Tooltip = "Enter the Name of the sheet", Required = true)]
-            public TextStructure sheetName { get; set; } = new TextStructure();
+            public TextStructure SheetName { get; set; } = new TextStructure();
         }
 
         public void Execute(Arguments arguments)
         {
-            CalcManager.CurrentCalc.ActivateSheet(arguments.sheetName.Value);
+            CalcManager.CurrentCalc.ActivateSheet(arguments.SheetName.Value);
         }
     }
 }

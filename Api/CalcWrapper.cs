@@ -79,7 +79,6 @@ namespace G1ANT.Addon.LibreOffice
                     }
                 }
             }
-
             return (unoidl.com.sun.star.sheet.XSpreadsheetDocument)xComponent;
         }
 
@@ -96,7 +95,6 @@ namespace G1ANT.Addon.LibreOffice
             {
                 throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
-
         }
 
         private void AddNewSheet(String Name)
@@ -107,7 +105,6 @@ namespace G1ANT.Addon.LibreOffice
                 short sheetIndex = Convert.ToInt16(xSheets.getElementNames().Length + 1); //Get the number of sheets already existing in the document, add one to get the new index. 
                 xSheets.insertNewByName(Name, sheetIndex);
             }
-
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
                 throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
@@ -126,7 +123,6 @@ namespace G1ANT.Addon.LibreOffice
                 throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
             }
         }
-
 
         private void SetActiveSheet(String sheetName)
         {
@@ -193,12 +189,12 @@ namespace G1ANT.Addon.LibreOffice
             SetActiveSheet(sheetName);
         }
 
-        public String GetValue(String sheetName, int colNum, int rowNum)
+        public String GetValue(int colNum, int rowNum)
         {
             try
             {
                 var xSheets = mxDocument.getSheets();
-                var xSheet = (unoidl.com.sun.star.sheet.XSpreadsheet)xSheets.getByName(sheetName).Value;
+                var xSheet = GetActiveSheet();
                 var xCell = (unoidl.com.sun.star.text.XText)xSheet.getCellByPosition(colNum - 1, rowNum - 1);
                 String Value = xCell.getString();
                 return Value;
@@ -209,12 +205,12 @@ namespace G1ANT.Addon.LibreOffice
             }
         }
 
-        public void SetValue(String Value, String sheetName, int colNum, int rowNum)
+        public void SetValue(String Value, int colNum, int rowNum)
         {
             try
             {
                 var xSheets = mxDocument.getSheets();
-                var xSheet = (unoidl.com.sun.star.sheet.XSpreadsheet)xSheets.getByName(sheetName).Value;
+                var xSheet = GetActiveSheet();
                 var xCell = (unoidl.com.sun.star.text.XText)xSheet.getCellByPosition(colNum - 1, rowNum -1 );
                 unoidl.com.sun.star.text.XTextCursor xTextCursor = xCell.createTextCursor();
                 xTextCursor.setString(Value);
@@ -239,8 +235,7 @@ namespace G1ANT.Addon.LibreOffice
                 else
                 {
                     xRows.insertByIndex(rowNumber, 1);
-                }
-                    
+                }            
             }
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
@@ -282,7 +277,6 @@ namespace G1ANT.Addon.LibreOffice
             catch(unoidl.com.sun.star.uno.Exception ex)
             {
                 throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-
             }
         }
 
@@ -298,7 +292,6 @@ namespace G1ANT.Addon.LibreOffice
             catch (unoidl.com.sun.star.uno.Exception ex)
             {
                 throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-
             }
         }
     }

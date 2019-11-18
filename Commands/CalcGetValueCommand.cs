@@ -18,19 +18,16 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Required = true, Name = "colnumber", Tooltip = "Enter the column number of the cell")]
-            public IntegerStructure colNum { get; set; } = new IntegerStructure();
+            public IntegerStructure ColNum { get; set; } = new IntegerStructure();
             [Argument(Required = true, Name = "rownumber", Tooltip = "Enter the row number of the cell")]
-            public IntegerStructure rowNum { get; set; } = new IntegerStructure();
-            [Argument(Required = false, Name = "sheetname", Tooltip = "Enter the name of sheet, the default sheet is \"Sheet1\"")]
-            public TextStructure sheetName { get; set; } = new TextStructure("Sheet1");
-
+            public IntegerStructure RowNum { get; set; } = new IntegerStructure();
             [Argument(Tooltip = "Contains the value stored in the cell")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
 
         public void Execute(Arguments arguments)
         {
-            var result = CalcManager.CurrentCalc.GetValue(arguments.sheetName.Value, arguments.colNum.Value, arguments.rowNum.Value);
+            var result = CalcManager.CurrentCalc.GetValue(arguments.ColNum.Value, arguments.RowNum.Value);
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new TextStructure(result));
         }
             

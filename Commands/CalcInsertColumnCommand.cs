@@ -16,14 +16,14 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "colnumber", Tooltip = "Enter the column number")]
-            public IntegerStructure colnumber { get; set; } = new IntegerStructure();
+            public IntegerStructure ColNumber { get; set; } = new IntegerStructure();
             [Argument(Name = "before", Required = true, Tooltip = "Set to true to insert before the specified column number, false to insert after")]
             public BooleanStructure before { get; set; } = new BooleanStructure();
         }
 
         public void Execute(Arguments arguments)
         {
-            CalcManager.CurrentCalc.InsertColumn(arguments.colnumber.Value, arguments.before.Value);
+            CalcManager.CurrentCalc.InsertColumn(arguments.ColNumber.Value, arguments.before.Value);
         }
     }
 }

@@ -8,7 +8,6 @@ namespace G1ANT.Addon.LibreOffice
 {
     public static class WriterManager
     {
-
     	private static List<WriterWrapper> launchedWriters = new List<WriterWrapper>();
         private static WriterWrapper currentWriter = null;
 
@@ -31,7 +30,7 @@ namespace G1ANT.Addon.LibreOffice
         public static void SwitchWriter(int id)
         {
            WriterWrapper instanceToSwitchTo = launchedWriters.Where(x => x.Id == id).FirstOrDefault();
-            currentWriter = instanceToSwitchTo ?? throw new ArgumentException($"No Writer instance found with id: {id}");
+           currentWriter = instanceToSwitchTo ?? throw new ArgumentException($"No Writer instance found with id: {id}");
         }
 
         private static int GetNextId()

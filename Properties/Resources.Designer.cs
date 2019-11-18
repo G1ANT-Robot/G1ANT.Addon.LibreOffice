@@ -59,55 +59,5 @@ namespace G1ANT.Addon.LibreOffice.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] cli_basetypes {
-            get {
-                object obj = ResourceManager.GetObject("cli_basetypes", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] cli_cppuhelper {
-            get {
-                object obj = ResourceManager.GetObject("cli_cppuhelper", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] cli_oootypes {
-            get {
-                object obj = ResourceManager.GetObject("cli_oootypes", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] cli_ure {
-            get {
-                object obj = ResourceManager.GetObject("cli_ure", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] cli_uretypes {
-            get {
-                object obj = ResourceManager.GetObject("cli_uretypes", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>G1ANT.Addon.LibreOffice</RootNamespace>
     <AssemblyName>G1ANT.Addon.LibreOffice</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -54,23 +54,23 @@
   <ItemGroup>
     <Reference Include="cli_basetypes, Version=1.0.20.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_basetypes.dll</HintPath>
+      <HintPath>Resources\cli_basetypes.dll</HintPath>
     </Reference>
     <Reference Include="cli_cppuhelper, Version=1.0.23.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_cppuhelper.dll</HintPath>
+      <HintPath>Resources\cli_cppuhelper.dll</HintPath>
     </Reference>
     <Reference Include="cli_oootypes, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_oootypes.dll</HintPath>
+      <HintPath>Resources\cli_oootypes.dll</HintPath>
     </Reference>
     <Reference Include="cli_ure, Version=1.0.23.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_ure.dll</HintPath>
+      <HintPath>Resources\cli_ure.dll</HintPath>
     </Reference>
     <Reference Include="cli_uretypes, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\LibreOffice\sdk\cli\cli_uretypes.dll</HintPath>
+      <HintPath>Resources\cli_uretypes.dll</HintPath>
     </Reference>
     <Reference Include="G1ANT.Language, Version=4.104.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\G1ANT.Language.4.104.0\lib\net452\G1ANT.Language.dll</HintPath>
@@ -163,6 +163,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\cli_basetypes.dll" />
+    <EmbeddedResource Include="Resources\cli_cppuhelper.dll" />
+    <EmbeddedResource Include="Resources\cli_oootypes.dll" />
+    <EmbeddedResource Include="Resources\cli_ure.dll" />
+    <EmbeddedResource Include="Resources\cli_uretypes.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,11 +16,11 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "rownumber", Required = true, Tooltip = "Enter the row number")]
-            public IntegerStructure rowNumber { get; set; } = new IntegerStructure();
+            public IntegerStructure RowNumber { get; set; } = new IntegerStructure();
         }
         public void Execute(Arguments arguments)
         {
-            CalcManager.CurrentCalc.RemoveRow(arguments.rowNumber.Value);
+            CalcManager.CurrentCalc.RemoveRow(arguments.RowNumber.Value);
         }
     }
 }

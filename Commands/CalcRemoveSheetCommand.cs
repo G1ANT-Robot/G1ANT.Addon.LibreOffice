@@ -17,12 +17,12 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "sheetname", Tooltip = "Enter the name of the sheet to remove.", Required = true)]
-            public TextStructure sheetName { get; set; } = new TextStructure();
+            public TextStructure SheetName { get; set; } = new TextStructure();
         }
 
         public void Execute(Arguments arguments)
         {
-            CalcManager.CurrentCalc.RemoveSheet(arguments.sheetName.Value);
+            CalcManager.CurrentCalc.RemoveSheet(arguments.SheetName.Value);
         }
     }
 }

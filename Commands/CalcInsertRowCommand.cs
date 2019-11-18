@@ -18,14 +18,14 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "rownumber", Required = true, Tooltip = "Enter the row number")]
-            public IntegerStructure rowNumber { get; set; } = new IntegerStructure();
+            public IntegerStructure RowNumber { get; set; } = new IntegerStructure();
             [Argument(Name = "before", Required = true, Tooltip = "Set to true to insert before the specified row number, false to insert after")]
             public BooleanStructure before { get; set; } = new BooleanStructure(true);
         }
 
         public void Execute(Arguments arguments)
         {
-                CalcManager.CurrentCalc.InsertRow(arguments.rowNumber.Value, arguments.before.Value);
+                CalcManager.CurrentCalc.InsertRow(arguments.RowNumber.Value, arguments.before.Value);
         }
     }
 }

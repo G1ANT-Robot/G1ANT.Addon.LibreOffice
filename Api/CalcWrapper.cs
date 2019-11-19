@@ -82,7 +82,7 @@ namespace G1ANT.Addon.LibreOffice
         {
             path = path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
             path = string.Concat("file:///", path);
-            XStorable xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
+            var xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
             xStorable.storeToURL(path, new PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
         }
 
@@ -95,25 +95,25 @@ namespace G1ANT.Addon.LibreOffice
 
         public void RemoveSheet(string name)
         {
-            XSpreadsheets xSheets = MxDocument.getSheets();
+            var xSheets = MxDocument.getSheets();
             xSheets.removeByName(name);
         }
 
         private void SetActiveSheet(string sheetName)
         {
-            XSpreadsheets xSheets = MxDocument.getSheets();
-            XModel xModel = (XModel)MxDocument;
-            XController xController = xModel.getCurrentController();
-            XSpreadsheetView sheetView = (XSpreadsheetView)xController;
-            XSpreadsheet xSpreadsheet = (XSpreadsheet)xSheets.getByName(sheetName).Value;
+            var xSheets = MxDocument.getSheets();
+            var xModel = (XModel)MxDocument;
+            var xController = xModel.getCurrentController();
+            var sheetView = (XSpreadsheetView)xController;
+            var xSpreadsheet = (XSpreadsheet)xSheets.getByName(sheetName).Value;
             sheetView.setActiveSheet(xSpreadsheet);
         }
 
         private XSpreadsheet GetActiveSheet()
         {
-            XModel xModel = (XModel)MxDocument;
-            XController xController = xModel.getCurrentController();
-            XSpreadsheetView sheetView = (XSpreadsheetView)xController;
+            var xModel = (XModel)MxDocument;
+            var xController = xModel.getCurrentController();
+            var sheetView = (XSpreadsheetView)xController;
             return sheetView.getActiveSheet();
         }
 
@@ -130,8 +130,8 @@ namespace G1ANT.Addon.LibreOffice
 
         public void Close()
         {
-            XModel xModel = (XModel)MxDocument;
-            XCloseable xCloseable = (XCloseable)xModel;
+            var xModel = (XModel)MxDocument;
+            var xCloseable = (XCloseable)xModel;
             xCloseable.close(true);
         }
 
@@ -157,14 +157,14 @@ namespace G1ANT.Addon.LibreOffice
         {
             var xSheet = GetActiveSheet();
             var xCell = (XText)xSheet.getCellByPosition(colNum - 1, rowNum -1 );
-            XTextCursor xTextCursor = xCell.createTextCursor();
+            var xTextCursor = xCell.createTextCursor();
             xTextCursor.setString(value);
         }
 
         public void InsertRow(int rowNumber, bool before)
         {
             var xSheet = GetActiveSheet();
-            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xCRRange = (XColumnRowRange)xSheet;
             var xRows = xCRRange.getRows();
             if (before)
             {
@@ -179,7 +179,7 @@ namespace G1ANT.Addon.LibreOffice
         public void InsertColumn(int colNumber, bool before)
         {
             var xSheet = GetActiveSheet();
-            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xCRRange = (XColumnRowRange)xSheet;
             var xColumns = xCRRange.getColumns();
             if (before)
             {
@@ -194,7 +194,7 @@ namespace G1ANT.Addon.LibreOffice
         public void RemoveRow(int rowNumber)
         {
             var xSheet = GetActiveSheet();
-            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xCRRange = (XColumnRowRange)xSheet;
             var xRows = xCRRange.getRows();
             xRows.removeByIndex(rowNumber - 1, 1);
         }
@@ -202,7 +202,7 @@ namespace G1ANT.Addon.LibreOffice
         public void RemoveColumn(int colNumber)
         {
             var xSheet = GetActiveSheet();
-            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xCRRange = (XColumnRowRange)xSheet;
             var xColumns = (XTableColumns)xCRRange.getColumns();
             xColumns.removeByIndex(colNumber - 1, 1);
         }

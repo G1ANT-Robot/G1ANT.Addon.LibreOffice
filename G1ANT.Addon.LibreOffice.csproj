@@ -55,25 +55,31 @@
     <Reference Include="cli_basetypes, Version=1.0.20.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cli_basetypes.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="cli_cppuhelper, Version=1.0.23.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cli_cppuhelper.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="cli_oootypes, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cli_oootypes.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="cli_ure, Version=1.0.23.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cli_ure.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="cli_uretypes, Version=1.0.9.0, Culture=neutral, PublicKeyToken=ce2cb7e279207b9e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Resources\cli_uretypes.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="G1ANT.Language, Version=4.104.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\G1ANT.Language.4.104.0\lib\net452\G1ANT.Language.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -145,21 +151,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\cli_basetypes.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\cli_cppuhelper.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\cli_oootypes.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\cli_ure.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\cli_uretypes.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="License.txt" />

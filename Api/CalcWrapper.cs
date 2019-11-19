@@ -1,298 +1,210 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using unoidl.com.sun.star.lang;
-using unoidl.com.sun.star.uno;
-using unoidl.com.sun.star.bridge;
 using unoidl.com.sun.star.frame;
-using G1ANT.Language;
+using unoidl.com.sun.star.sheet;
+using unoidl.com.sun.star.util;
+using unoidl.com.sun.star.text;
+using unoidl.com.sun.star.table;
+using unoidl.com.sun.star.beans;
 
 namespace G1ANT.Addon.LibreOffice
 {
     public class CalcWrapper
     {
         public int Id { get; set; }
-
         public CalcWrapper(int id)
         {
             this.Id = id;
         }
 
-        private unoidl.com.sun.star.uno.XComponentContext m_xContext;
-        private unoidl.com.sun.star.lang.XMultiServiceFactory mxMSFactory;
-        public unoidl.com.sun.star.sheet.XSpreadsheetDocument mxDocument;
-
-        private unoidl.com.sun.star.sheet.XSpreadsheetDocument InitDocument(bool Hidden, String Path)
+        public XSpreadsheetDocument mxDocument;
+        public XSpreadsheetDocument MxDocument
         {
-            mxMSFactory = Connect();
-            XComponentLoader aLoader = (XComponentLoader)mxMSFactory.createInstance("com.sun.star.frame.Desktop");
-            XComponent xComponent;
-            unoidl.com.sun.star.beans.PropertyValue[] loadProperties = new unoidl.com.sun.star.beans.PropertyValue[2];
-            loadProperties[0] = new unoidl.com.sun.star.beans.PropertyValue();
-            loadProperties[1] = new unoidl.com.sun.star.beans.PropertyValue();
-            loadProperties[1].Name = "ReadOnly";
-            loadProperties[1].Value = new uno.Any(false);
+            get { return mxDocument ?? throw new ApplicationException("Calc instance must be opened first using calc.open command"); }
+            private set { mxDocument = value; }
+        }
 
-            if (Hidden)
+        private XSpreadsheetDocument InitDocument(bool hidden, string path)
+        {
+            var aLoader = CreateLoader();
+
+            if (hidden)
             {
-                loadProperties[0].Name = "Hidden";
-                loadProperties[0].Value = new uno.Any(true);
-
-                //Check to see if the path is provided by the user, if it's empty, create a new document. 
-                if (String.IsNullOrEmpty(Path))
-                {
-                    xComponent = aLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, loadProperties);
-                }
-                else
-                {
-                    try
-                    {
-                        Path = String.Format("file:///{0}", Path);
-                        xComponent = aLoader.loadComponentFromURL(Path, "_blank", 0, loadProperties);
-                    }
-                    catch (unoidl.com.sun.star.uno.Exception ex)
-                    {
-                        throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-                    }
-                }
+                var loadProperties = CreatePropertiesForHiddenReadonlyLoad();
+                return IsNewDocument(path) ? CreateNewDocument(aLoader, loadProperties) : LoadDocument(path, aLoader, loadProperties);
             }
             else
             {
-                loadProperties[0].Name = "Hidden";
-                loadProperties[0].Value = new uno.Any(false);
-                if (String.IsNullOrEmpty(Path))
-                {
-                    xComponent = aLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, new unoidl.com.sun.star.beans.PropertyValue[0]);
-                }
-                else
-                {
-                    try
-                    {
-                        Path = String.Format("file:///{0}", Path);
-                        xComponent = aLoader.loadComponentFromURL(Path, "_blank", 0, new unoidl.com.sun.star.beans.PropertyValue[0]);
-                    }
-                    catch (unoidl.com.sun.star.uno.Exception ex)
-                    {
-                        throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-                    }
-                }
-            }
-            return (unoidl.com.sun.star.sheet.XSpreadsheetDocument)xComponent;
-        }
-
-        private void SaveDocument(String Path)
-        {
-            try
-            {
-                Path = Path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
-                Path = String.Concat("file:///", Path);
-                XStorable xStorable = (XStorable)mxDocument; // Typecast the currently open document to XStorable type.
-                xStorable.storeToURL(Path, new unoidl.com.sun.star.beans.PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+                return IsNewDocument(path) ? CreateNewDocument(aLoader) : LoadDocument(path, aLoader);
             }
         }
 
-        private void AddNewSheet(String Name)
+        private static bool IsNewDocument(string path)
         {
-            try
-            {
-                unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
-                short sheetIndex = Convert.ToInt16(xSheets.getElementNames().Length + 1); //Get the number of sheets already existing in the document, add one to get the new index. 
-                xSheets.insertNewByName(Name, sheetIndex);
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            return string.IsNullOrEmpty(path);
         }
 
-        public void RemoveSheet(String Name)
+        private static PropertyValue[] CreatePropertiesForHiddenReadonlyLoad()
         {
-            try
+            return new PropertyValue[2] {
+            new PropertyValue()
             {
-                unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
-                xSheets.removeByName(Name);
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
+            Name = "Hidden",
+            Value = new uno.Any(true)
+            },
+            new PropertyValue()
             {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+                Name = "ReadOnly",
+                Value = new uno.Any(false)
             }
+            };
         }
 
-        private void SetActiveSheet(String sheetName)
+        private static XSpreadsheetDocument LoadDocument(string path, XComponentLoader aLoader, PropertyValue[] loadProperties = null)
         {
-            try
-            {
-                unoidl.com.sun.star.sheet.XSpreadsheets xSheets = mxDocument.getSheets();
-                unoidl.com.sun.star.frame.XModel xModel = (unoidl.com.sun.star.frame.XModel)mxDocument;
-                unoidl.com.sun.star.frame.XController xController = xModel.getCurrentController();
-                unoidl.com.sun.star.sheet.XSpreadsheetView sheetView = (unoidl.com.sun.star.sheet.XSpreadsheetView)xController;
-                unoidl.com.sun.star.sheet.XSpreadsheet xSpreadsheet = (unoidl.com.sun.star.sheet.XSpreadsheet)xSheets.getByName(sheetName).Value;
-                sheetView.setActiveSheet(xSpreadsheet);
-            }
-           catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            path = string.Format("file:///{0}", path);
+            return (XSpreadsheetDocument)aLoader.loadComponentFromURL(path, "_blank", 0, loadProperties ?? new PropertyValue[0]);
         }
-        private unoidl.com.sun.star.sheet.XSpreadsheet GetActiveSheet()
+
+        private static XSpreadsheetDocument CreateNewDocument(XComponentLoader aLoader, PropertyValue[] loadProperties = null)
         {
-            unoidl.com.sun.star.frame.XModel xModel = (unoidl.com.sun.star.frame.XModel)mxDocument;
-            unoidl.com.sun.star.frame.XController xController = xModel.getCurrentController();
-            unoidl.com.sun.star.sheet.XSpreadsheetView sheetView = (unoidl.com.sun.star.sheet.XSpreadsheetView)xController;
+            return (XSpreadsheetDocument)aLoader.loadComponentFromURL("private:factory/scalc", "_blank", 0, loadProperties ?? new PropertyValue[0]);
+        }
+
+        private XComponentLoader CreateLoader()
+        {
+            var mxContext = uno.util.Bootstrap.bootstrap();
+            var mxMSFactory = (XMultiServiceFactory)mxContext.getServiceManager();
+            return (XComponentLoader)mxMSFactory.createInstance("com.sun.star.frame.Desktop");
+        }
+
+        private void SaveDocument(string path)
+        {
+            path = path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
+            path = string.Concat("file:///", path);
+            XStorable xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
+            xStorable.storeToURL(path, new PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
+        }
+
+        private void AddNewSheet(string name)
+        {
+            var xSheets = MxDocument.getSheets();
+            short sheetIndex = Convert.ToInt16(xSheets.getElementNames().Length + 1); //Get the number of sheets already existing in the document, add one to get the new index. 
+            xSheets.insertNewByName(name, sheetIndex);
+        }
+
+        public void RemoveSheet(string name)
+        {
+            XSpreadsheets xSheets = MxDocument.getSheets();
+            xSheets.removeByName(name);
+        }
+
+        private void SetActiveSheet(string sheetName)
+        {
+            XSpreadsheets xSheets = MxDocument.getSheets();
+            XModel xModel = (XModel)MxDocument;
+            XController xController = xModel.getCurrentController();
+            XSpreadsheetView sheetView = (XSpreadsheetView)xController;
+            XSpreadsheet xSpreadsheet = (XSpreadsheet)xSheets.getByName(sheetName).Value;
+            sheetView.setActiveSheet(xSpreadsheet);
+        }
+
+        private XSpreadsheet GetActiveSheet()
+        {
+            XModel xModel = (XModel)MxDocument;
+            XController xController = xModel.getCurrentController();
+            XSpreadsheetView sheetView = (XSpreadsheetView)xController;
             return sheetView.getActiveSheet();
         }
 
-        private XMultiServiceFactory Connect()
+        public void Save(string path)
         {
-            m_xContext = uno.util.Bootstrap.bootstrap();
-            return (XMultiServiceFactory)m_xContext.getServiceManager();
+            SaveDocument(path);
         }
 
-        public int Open(bool Hidden, String Path)
+        public int Open(bool hidden, string path)
         {
-            mxDocument = InitDocument(Hidden, Path);
-            return this.Id;
-        }
-
-        public void Save(String Path)
-        {
-            SaveDocument(Path);
+            MxDocument = InitDocument(hidden, path);
+            return Id;
         }
 
         public void Close()
         {
-            try
-            {
-                XModel xModel = (XModel)mxDocument;
-                unoidl.com.sun.star.util.XCloseable xCloseable = (unoidl.com.sun.star.util.XCloseable)xModel;
-                xCloseable.close(true);
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            XModel xModel = (XModel)MxDocument;
+            XCloseable xCloseable = (XCloseable)xModel;
+            xCloseable.close(true);
         }
 
-        public void AddSheet(String Name)
+        public void AddSheet(string name)
         {
-            AddNewSheet(Name);
+            AddNewSheet(name);
         }
 
-        public void ActivateSheet(String sheetName)
+        public void ActivateSheet(string sheetName)
         {
             SetActiveSheet(sheetName);
         }
 
-        public String GetValue(int colNum, int rowNum)
+        public string GetValue(int colNum, int rowNum)
         {
-            try
-            {
-                var xSheets = mxDocument.getSheets();
-                var xSheet = GetActiveSheet();
-                var xCell = (unoidl.com.sun.star.text.XText)xSheet.getCellByPosition(colNum - 1, rowNum - 1);
-                String Value = xCell.getString();
-                return Value;
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            var xSheet = GetActiveSheet();
+            var xCell = (XText)xSheet.getCellByPosition(colNum - 1, rowNum - 1);
+            string Value = xCell.getString();
+            return Value;
         }
 
-        public void SetValue(String Value, int colNum, int rowNum)
+        public void SetValue(string value, int colNum, int rowNum)
         {
-            try
-            {
-                var xSheets = mxDocument.getSheets();
-                var xSheet = GetActiveSheet();
-                var xCell = (unoidl.com.sun.star.text.XText)xSheet.getCellByPosition(colNum - 1, rowNum -1 );
-                unoidl.com.sun.star.text.XTextCursor xTextCursor = xCell.createTextCursor();
-                xTextCursor.setString(Value);
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            var xSheet = GetActiveSheet();
+            var xCell = (XText)xSheet.getCellByPosition(colNum - 1, rowNum -1 );
+            XTextCursor xTextCursor = xCell.createTextCursor();
+            xTextCursor.setString(value);
         }
 
         public void InsertRow(int rowNumber, bool before)
         {
-            try
+            var xSheet = GetActiveSheet();
+            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xRows = xCRRange.getRows();
+            if (before)
             {
-                var xSheet = GetActiveSheet();
-                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
-                var xRows = xCRRange.getRows();
-                if (before)
-                {
-                    xRows.insertByIndex(rowNumber - 1, 1);
-                }
-                else
-                {
-                    xRows.insertByIndex(rowNumber, 1);
-                }            
+                xRows.insertByIndex(rowNumber - 1, 1);
             }
-            catch(unoidl.com.sun.star.uno.Exception ex)
+            else
             {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+                xRows.insertByIndex(rowNumber, 1);
+            }            
         }
 
         public void InsertColumn(int colNumber, bool before)
         {
-            try
+            var xSheet = GetActiveSheet();
+            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xColumns = xCRRange.getColumns();
+            if (before)
             {
-                var xSheet = GetActiveSheet();
-                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
-                var xColumns = xCRRange.getColumns();
-                if (before)
-                {
-                    xColumns.insertByIndex(colNumber - 1, 1);
-                }
-                else
-                {
-                    xColumns.insertByIndex(colNumber, 1);
-                }
+                xColumns.insertByIndex(colNumber - 1, 1);
             }
-            catch (unoidl.com.sun.star.uno.Exception ex)
+            else
             {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+                xColumns.insertByIndex(colNumber, 1);
             }
         }
 
         public void RemoveRow(int rowNumber)
         {
-            try
-            {
-                var xSheet = GetActiveSheet();
-                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
-                var xRows = xCRRange.getRows();
-                xRows.removeByIndex(rowNumber - 1, 1);
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            var xSheet = GetActiveSheet();
+            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xRows = xCRRange.getRows();
+            xRows.removeByIndex(rowNumber - 1, 1);
         }
 
         public void RemoveColumn(int colNumber)
         {
-            try
-            {
-                var xSheet = GetActiveSheet();
-                unoidl.com.sun.star.table.XColumnRowRange xCRRange = (unoidl.com.sun.star.table.XColumnRowRange)xSheet;
-                var xColumns = (unoidl.com.sun.star.table.XTableColumns)xCRRange.getColumns();
-                xColumns.removeByIndex(colNumber - 1, 1);
-            }
-            catch (unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            var xSheet = GetActiveSheet();
+            XColumnRowRange xCRRange = (XColumnRowRange)xSheet;
+            var xColumns = (XTableColumns)xCRRange.getColumns();
+            xColumns.removeByIndex(colNumber - 1, 1);
         }
     }
 }

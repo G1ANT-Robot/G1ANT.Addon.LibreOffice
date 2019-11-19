@@ -2,26 +2,32 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace G1ANT.Addon.LibreOffice
 {
-    public static class CalcManager
+    public class CalcManager
     {
+        private List<CalcWrapper> launchedCalcs = new List<CalcWrapper>();
+        private CalcWrapper currentCalc = null;
+        private static CalcManager instance = null;
 
-        private static List<CalcWrapper> launchedCalcs = new List<CalcWrapper>();
-        private static CalcWrapper currentCalc = null;
-
-        public static CalcWrapper CurrentCalc
+        public static CalcManager Instance
         {
             get
             {
-                if (currentCalc == null)
+                if (instance == null)
                 {
-                    throw new ApplicationException("Calc instance must be opened first using calc.open command");
+                    instance = new CalcManager();
                 }
-                return currentCalc;
+                return instance;
+            }
+        }
+
+        public CalcWrapper CurrentCalc
+        {
+            get
+            {
+                return currentCalc ?? throw new ApplicationException("Calc instance must be opened first using calc.open command");
             }
             private set
             {
@@ -29,18 +35,27 @@ namespace G1ANT.Addon.LibreOffice
             }
         }
 
-        public static void SwitchCalc(int id)
+        public void SwitchCalc(int id)
         {
-            CalcWrapper instanceToSwitchTo = launchedCalcs.Where(x => x.Id == id).FirstOrDefault();
+            CalcWrapper instanceToSwitchTo = GetById(id);
             CurrentCalc = instanceToSwitchTo ?? throw new ArgumentException($"No Calc instance found with id: {id}");
         }
 
-        private static int GetNextId()
+        private int GetNextId()
         {
-            return launchedCalcs.Count() > 0 ? launchedCalcs.Max(x => x.Id) + 1 : 0;
+            return launchedCalcs.Any() ? launchedCalcs.Max(x => x.Id) + 1 : 0;
         }
 
-        public static CalcWrapper CreateInstance()
+        private CalcWrapper GetById(int? id)
+        {
+            if (id == null)
+            {
+                id = CurrentCalc.Id;
+            }
+            return launchedCalcs.FirstOrDefault(x => x.Id == id);
+        }
+
+        public CalcWrapper CreateInstance()
         {
             int assignedId = GetNextId();
             CalcWrapper wrapper = new CalcWrapper(assignedId);
@@ -49,13 +64,9 @@ namespace G1ANT.Addon.LibreOffice
             return wrapper;
         }
 
-        public static void RemoveInstance(int? id = null)
+        public void RemoveInstance(int? id = null)
         {
-            if (id == null)
-            {
-                id = CurrentCalc.Id;
-            }
-            var toRemove = launchedCalcs.Where(x => x.Id == id).FirstOrDefault();
+            var toRemove = GetById(id);
             if (toRemove != null)
             {
                 launchedCalcs.Remove(toRemove);
@@ -63,7 +74,7 @@ namespace G1ANT.Addon.LibreOffice
             }
             else
             {
-                throw new ArgumentException($"Unable to close Calc instance with specified id argument: '{id}'");
+                throw new ArgumentException($"No Calc with given id '{id}' found");
             }
         }
     }

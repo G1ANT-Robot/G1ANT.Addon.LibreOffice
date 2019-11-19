@@ -1,25 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace G1ANT.Addon.LibreOffice
 {
-    public static class WriterManager
+    public class WriterManager
     {
-    	private static List<WriterWrapper> launchedWriters = new List<WriterWrapper>();
-        private static WriterWrapper currentWriter = null;
+    	private List<WriterWrapper> launchedWriters = new List<WriterWrapper>();
+        private WriterWrapper currentWriter = null;
+        private static WriterManager instance = null;
 
-        public static WriterWrapper CurrentWriter
+        private WriterManager() { }
+
+        public static WriterManager Instance
         {
             get
             {
-                if (currentWriter == null)
+                if(instance == null)
                 {
-                    throw new ApplicationException("Writer instance must be opened first using writer.open command");
+                    instance = new WriterManager();
                 }
-                return currentWriter;
+                return instance;
+            }
+        }
+
+        public WriterWrapper CurrentWriter
+        {
+            get
+            {
+                return currentWriter ?? throw new ApplicationException("Writer instance must be opened first using writer.open command");
             }
             private set
             {
@@ -27,18 +36,27 @@ namespace G1ANT.Addon.LibreOffice
             }
         }
 
-        public static void SwitchWriter(int id)
+        public void SwitchWriter(int id)
         {
-           WriterWrapper instanceToSwitchTo = launchedWriters.Where(x => x.Id == id).FirstOrDefault();
+           WriterWrapper instanceToSwitchTo = GetById(id);
            currentWriter = instanceToSwitchTo ?? throw new ArgumentException($"No Writer instance found with id: {id}");
         }
 
-        private static int GetNextId()
+        private int GetNextId()
         {
-            return launchedWriters.Count() > 0 ? launchedWriters.Max(x => x.Id) + 1 : 0;
+            return launchedWriters.Any() ? launchedWriters.Max(x => x.Id) + 1 : 0;
         }
 
-        public static WriterWrapper CreateInstance()
+        private WriterWrapper GetById(int? id)
+        {
+            if (id == null)
+            {
+                id = currentWriter.Id;
+            }
+            return launchedWriters.FirstOrDefault(x => x.Id == id);
+        }
+
+        public WriterWrapper CreateInstance()
         {
             int assignedId = GetNextId();
             WriterWrapper wrapper = new WriterWrapper(assignedId);
@@ -47,13 +65,10 @@ namespace G1ANT.Addon.LibreOffice
             return wrapper;
         }
 
-        public static void RemoveInstance(int? id = null)
+        public void RemoveInstance(int? id = null)
         {
-            if (id == null)
-            {
-                id = currentWriter.Id;
-            }
-            var toRemove = launchedWriters.Where(x => x.Id == id).FirstOrDefault();
+
+            var toRemove = GetById(id);
             if (toRemove != null)
             {
                 launchedWriters.Remove(toRemove);
@@ -61,7 +76,7 @@ namespace G1ANT.Addon.LibreOffice
             }
             else
             {
-                throw new ArgumentException($"Unable to close Writer instance with specified id argument: '{id}'");
+                throw new ArgumentException($"No Writer with given id '{id}' found");
             }
         }
     }

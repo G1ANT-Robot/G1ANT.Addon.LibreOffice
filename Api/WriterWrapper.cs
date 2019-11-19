@@ -1,186 +1,132 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using unoidl.com.sun.star.lang;
-using unoidl.com.sun.star.uno;
-using unoidl.com.sun.star.bridge;
 using unoidl.com.sun.star.frame;
-using G1ANT.Language;
+using unoidl.com.sun.star.text;
+using unoidl.com.sun.star.beans;
+using unoidl.com.sun.star.util;
 
 namespace G1ANT.Addon.LibreOffice
 {
     public class WriterWrapper
     {
-
     	public int Id { get; set; }
-
-    	private unoidl.com.sun.star.uno.XComponentContext m_xContext;
-        private unoidl.com.sun.star.lang.XMultiServiceFactory mxMSFactory;
-        public unoidl.com.sun.star.text.XTextDocument mxDocument;
-
         public WriterWrapper(int id)
         {
             this.Id = id;
         }
-        
 
-
-        private XMultiServiceFactory Connect()
+        public XTextDocument mxDocument;
+        public XTextDocument MxDocument
         {
-            m_xContext = uno.util.Bootstrap.bootstrap();
-            return (XMultiServiceFactory)m_xContext.getServiceManager();
+            get { return mxDocument ?? throw new ApplicationException("Writer instance must be opened first using calc.open command"); }
+            private set { mxDocument = value; }
         }
 
-        private unoidl.com.sun.star.text.XTextDocument InitDocument(bool Hidden, String Path)
+        private XTextDocument InitDocument(bool hidden, string path)
         {
-            mxMSFactory = Connect();
-            XComponentLoader aLoader = (XComponentLoader)mxMSFactory.createInstance("com.sun.star.frame.Desktop");
-            XComponent xComponent;
-            unoidl.com.sun.star.beans.PropertyValue[] loadProperties = new unoidl.com.sun.star.beans.PropertyValue[2];
-            loadProperties[0] = new unoidl.com.sun.star.beans.PropertyValue();
-            loadProperties[1] = new unoidl.com.sun.star.beans.PropertyValue();
-            loadProperties[1].Name = "ReadOnly";
-            loadProperties[1].Value = new uno.Any(false);
+            var aLoader = CreateLoader();
 
-            if (Hidden)
+            if (hidden)
             {
-                loadProperties[0].Name = "Hidden";
-                loadProperties[0].Value = new uno.Any(true);
-
-                //Check to see if the path is provided by the user, if it's empty, create a new document. 
-                if (String.IsNullOrEmpty(Path))
-                {
-                    xComponent = aLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProperties);
-                }
-                else
-                {
-                    try
-                    {
-                        Path = String.Format("file:///{0}", Path);
-                        xComponent = aLoader.loadComponentFromURL(Path, "_blank", 0, loadProperties);
-                    }
-                    catch (unoidl.com.sun.star.uno.Exception ex)
-                    {
-                        throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-                    }
-                }
+                var loadProperties = CreatePropertiesForHiddenReadonlyLoad();
+                return IsNewDocument(path) ? CreateNewDocument(aLoader, loadProperties) : LoadDocument(path, aLoader, loadProperties);
             }
             else
             {
-                loadProperties[0].Name = "Hidden";
-                loadProperties[0].Value = new uno.Any(false);
-                if (String.IsNullOrEmpty(Path))
-                {
-                    xComponent = aLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, new unoidl.com.sun.star.beans.PropertyValue[0]);
-                }
-                else
-                {
-                    try
-                    {
-                        Path = String.Format("file:///{0}", Path);
-                        xComponent = aLoader.loadComponentFromURL(Path, "_blank", 0, new unoidl.com.sun.star.beans.PropertyValue[0]);
-                    }
-                    catch (unoidl.com.sun.star.uno.Exception ex)
-                    {
-                        throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-                    }
-                }
+                return IsNewDocument(path) ? CreateNewDocument(aLoader) : LoadDocument(path, aLoader);
             }
-
-            return (unoidl.com.sun.star.text.XTextDocument)xComponent;
         }
 
-        private void SaveDocument(String Path)
+        private static bool IsNewDocument(string path)
         {
-            try
-            {
-                Path = Path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
-                Path = String.Concat("file:///", Path);
-                XStorable xStorable = (XStorable)mxDocument; // Typecast the currently open document to XStorable type.
-                xStorable.storeToURL(Path, new unoidl.com.sun.star.beans.PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            return string.IsNullOrEmpty(path);
         }
 
+        private static PropertyValue[] CreatePropertiesForHiddenReadonlyLoad()
+        {
+            return new PropertyValue[2] {
+                new PropertyValue()
+                {
+                    Name = "Hidden",
+                    Value = new uno.Any(true)
+                },
+                new PropertyValue()
+                {
+                    Name = "ReadOnly",
+                    Value = new uno.Any(false)
+                }
+            };
+        }
+
+        private static XTextDocument LoadDocument(string path, XComponentLoader aLoader, PropertyValue[] loadProperties = null)
+        {
+            path = string.Format("file:///{0}", path);
+            return (XTextDocument)aLoader.loadComponentFromURL(path, "_blank", 0, loadProperties ?? new PropertyValue[0]);
+        }
+
+        private static XTextDocument CreateNewDocument(XComponentLoader aLoader, PropertyValue[] loadProperties = null)
+        {
+            return (XTextDocument)aLoader.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProperties ?? new PropertyValue[0]);
+        }
+
+        private XComponentLoader CreateLoader()
+        {
+            var mxContext = uno.util.Bootstrap.bootstrap();
+            var mxMSFactory = (XMultiServiceFactory)mxContext.getServiceManager();
+            return (XComponentLoader)mxMSFactory.createInstance("com.sun.star.frame.Desktop");
+        }
+
+        private void SaveDocument(string path)
+        {
+            path = path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
+            path = string.Concat("file:///", path);
+            XStorable xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
+            xStorable.storeToURL(path, new PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
+        }
 
     	public void Close()
         {
-            try
-            {
-                XModel xModel = (XModel)mxDocument;
-                unoidl.com.sun.star.util.XCloseable xCloseable = (unoidl.com.sun.star.util.XCloseable)xModel;
-                xCloseable.close(true);
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            XModel xModel = (XModel)MxDocument;
+            XCloseable xCloseable = (XCloseable)xModel;
+            xCloseable.close(true);
         }
 
-        public int Open(bool Hidden, String Path)
+        public int Open(bool hidden, string path)
         {
-            mxDocument = InitDocument(Hidden, Path);
+            MxDocument = InitDocument(hidden, path);
             return this.Id;
         }
 
-        public void Save(String Path)
+        public void Save(string path)
         {
-            SaveDocument(Path);
+            SaveDocument(path);
         }
 
-        public void InsertText(String text , bool append)
+        public void InsertText(string text , bool append)
         {
-            try
+            XText xText = MxDocument.getText();
+            if (append)
             {
-                unoidl.com.sun.star.text.XText xText = mxDocument.getText();
-                if (append)
-                {
-                    unoidl.com.sun.star.text.XTextRange xEnd = xText.getEnd();
-                    xEnd.setString(text);
-                }
-                else
-                {
-                    xText.setString(text);
-                }
+                XTextRange xEnd = xText.getEnd();
+                xEnd.setString(text);
             }
-            catch(unoidl.com.sun.star.uno.Exception ex)
+            else
             {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
+                xText.setString(text);
             }
-
         }
 
-        public String GetText()
+        public string GetText()
         {
-            try
-            {
-                unoidl.com.sun.star.text.XText xText = mxDocument.getText();
-                return xText.getString();
-            }
-
-            catch (unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            XText xText = MxDocument.getText();
+            return xText.getString();
         }
         
-        public void ReplaceWith(String word, String replaceWith)
+        public void ReplaceWith(string word, string replaceWith)
         {
-            try
-            {
-                unoidl.com.sun.star.text.XText xText = mxDocument.getText();
-                var text = xText.getString();
-                xText.setString(text.Replace(word, replaceWith));
-            }
-            catch(unoidl.com.sun.star.uno.Exception ex)
-            {
-                throw new unoidl.com.sun.star.uno.Exception(ex.Message, ex);
-            }
+            XText xText = MxDocument.getText();
+            var text = xText.getString();
+            xText.setString(text.Replace(word, replaceWith));
         }
     }
 }

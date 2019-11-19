@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using G1ANT.Language;
+﻿using G1ANT.Language;
 namespace G1ANT.Addon.LibreOffice.Commands
 {
     [Command(Name = "calc.removerow", Tooltip = "Removes a row with the specified row number")]
     class CalcRemoveRowCommand : Command
     {
-        public CalcRemoveRowCommand(AbstractScripter scripter) : base(scripter)
-        {
+        public CalcRemoveRowCommand(AbstractScripter scripter) : base(scripter) { }
 
-        }
         public class Arguments : CommandArguments
         {
             [Argument(Name = "rownumber", Required = true, Tooltip = "Enter the row number")]
@@ -20,7 +13,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
         }
         public void Execute(Arguments arguments)
         {
-            CalcManager.CurrentCalc.RemoveRow(arguments.RowNumber.Value);
+            CalcManager.Instance.CurrentCalc.RemoveRow(arguments.RowNumber.Value);
         }
     }
 }

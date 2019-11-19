@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using G1ANT.Language;
+﻿using G1ANT.Language;
+
 namespace G1ANT.Addon.LibreOffice.Commands
 {
     [Command(Name = "writer.open", Tooltip = "This command creates a new instance of Writer")]
     class WriterOpenCommand : Command
     {
-        public WriterOpenCommand(AbstractScripter scripter) : base(scripter)
-        {
-
-        }
+        public WriterOpenCommand(AbstractScripter scripter) : base(scripter) { }
 
         public class Arguments : CommandArguments
         {
@@ -25,10 +18,11 @@ namespace G1ANT.Addon.LibreOffice.Commands
             [Argument(Tooltip = "Contains ID of the opened Instance, can be used with writer.switch")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
         }
+
         public void Execute(Arguments arguments)
         {
-            WriterWrapper writerWrapper = WriterManager.CreateInstance();
-            WriterManager.CurrentWriter.Open(arguments.Hidden.Value, arguments.path.Value);
+            WriterWrapper writerWrapper = WriterManager.Instance.CreateInstance();
+            writerWrapper.Open(arguments.Hidden.Value, arguments.path.Value);
             Scripter.Variables.SetVariableValue(arguments.Result.Value, new Language.IntegerStructure(writerWrapper.Id));
         }
     }

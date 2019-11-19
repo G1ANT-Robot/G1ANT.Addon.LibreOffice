@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using G1ANT.Language;
+﻿using G1ANT.Language;
 
 namespace G1ANT.Addon.LibreOffice.Commands
 {
     [Command(Name = "calc.removesheet", Tooltip = "Removes the specified sheet")]
     class CalcRemoveSheetCommand : Command
     {
-        public CalcRemoveSheetCommand(AbstractScripter scripter) : base(scripter)
-        {
+        public CalcRemoveSheetCommand(AbstractScripter scripter) : base(scripter) { }
 
-        }
         public class Arguments : CommandArguments
         {
             [Argument(Name = "sheetname", Tooltip = "Enter the name of the sheet to remove.", Required = true)]
@@ -22,7 +15,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public void Execute(Arguments arguments)
         {
-            CalcManager.CurrentCalc.RemoveSheet(arguments.SheetName.Value);
+            CalcManager.Instance.CurrentCalc.RemoveSheet(arguments.SheetName.Value);
         }
     }
 }

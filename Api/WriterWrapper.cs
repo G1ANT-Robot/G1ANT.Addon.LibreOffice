@@ -80,14 +80,14 @@ namespace G1ANT.Addon.LibreOffice
         {
             path = path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
             path = string.Concat("file:///", path);
-            XStorable xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
+            var xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
             xStorable.storeToURL(path, new PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
         }
 
     	public void Close()
         {
-            XModel xModel = (XModel)MxDocument;
-            XCloseable xCloseable = (XCloseable)xModel;
+            var xModel = (XModel)MxDocument;
+            var xCloseable = (XCloseable)xModel;
             xCloseable.close(true);
         }
 
@@ -107,7 +107,7 @@ namespace G1ANT.Addon.LibreOffice
             XText xText = MxDocument.getText();
             if (append)
             {
-                XTextRange xEnd = xText.getEnd();
+                var xEnd = xText.getEnd();
                 xEnd.setString(text);
             }
             else
@@ -118,13 +118,13 @@ namespace G1ANT.Addon.LibreOffice
 
         public string GetText()
         {
-            XText xText = MxDocument.getText();
+            var xText = MxDocument.getText();
             return xText.getString();
         }
         
         public void ReplaceWith(string word, string replaceWith)
         {
-            XText xText = MxDocument.getText();
+            var xText = MxDocument.getText();
             var text = xText.getString();
             xText.setString(text.Replace(word, replaceWith));
         }

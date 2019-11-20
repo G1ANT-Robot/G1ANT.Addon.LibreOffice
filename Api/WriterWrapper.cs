@@ -12,7 +12,7 @@ namespace G1ANT.Addon.LibreOffice
     	public int Id { get; set; }
         public WriterWrapper(int id)
         {
-            this.Id = id;
+            Id = id;
         }
 
         public XTextDocument mxDocument;
@@ -94,7 +94,7 @@ namespace G1ANT.Addon.LibreOffice
         public int Open(bool hidden, string path)
         {
             MxDocument = InitDocument(hidden, path);
-            return this.Id;
+            return Id;
         }
 
         public void Save(string path)
@@ -104,7 +104,7 @@ namespace G1ANT.Addon.LibreOffice
 
         public void InsertText(string text , bool append)
         {
-            XText xText = MxDocument.getText();
+            var xText = MxDocument.getText();
             if (append)
             {
                 var xEnd = xText.getEnd();

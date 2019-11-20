@@ -10,10 +10,10 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Required = true, Name = "colnumber", Tooltip = "Enter the column number of the cell")]
-            public IntegerStructure ColNum { get; set; } = new IntegerStructure();
+            public IntegerStructure ColNum { get; set; }
 
             [Argument(Required = true, Name = "rownumber", Tooltip = "Enter the row number of the cell")]
-            public IntegerStructure RowNum { get; set; } = new IntegerStructure();
+            public IntegerStructure RowNum { get; set; }
 
             [Argument(Required = true, Name = "value", Tooltip = "Enter the value to insert into the cell")]
             public TextStructure value { get; set; } = new TextStructure();

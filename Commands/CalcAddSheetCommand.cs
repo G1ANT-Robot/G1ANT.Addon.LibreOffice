@@ -15,8 +15,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public void Execute(Arguments arguments)
         {
-            var calcManager = new CalcManager();
-            calcManager.CurrentCalc.AddSheet(arguments.SheetName.Value);
+            CalcManager.Instance.CurrentCalc.AddSheet(arguments.SheetName.Value);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Name = "colnumber", Tooltip = "Enter the column number")]
-            public IntegerStructure ColNumber { get; set; } = new IntegerStructure();
+            [Argument(Name = "colindex", Tooltip = "Enter the column number", Required = true)]
+            public IntegerStructure ColNumber { get; set; }
 
             [Argument(Name = "before", Required = true, Tooltip = "Set to true to insert before the specified column number, false to insert after")]
-            public BooleanStructure before { get; set; } = new BooleanStructure();
+            public BooleanStructure before { get; set; } = new BooleanStructure(false);
         }
 
         public void Execute(Arguments arguments)

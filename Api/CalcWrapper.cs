@@ -14,7 +14,7 @@ namespace G1ANT.Addon.LibreOffice
         public int Id { get; set; }
         public CalcWrapper(int id)
         {
-            this.Id = id;
+            Id = id;
         }
 
         public XSpreadsheetDocument mxDocument;
@@ -80,10 +80,10 @@ namespace G1ANT.Addon.LibreOffice
 
         private void SaveDocument(string path)
         {
-            path = path.Replace("\\", "/"); // Convert forward slashes to backslashes, converting it to the correct format storeToURL expects. 
+            path = path.Replace("\\", "/");
             path = string.Concat("file:///", path);
-            var xStorable = (XStorable)MxDocument; // Typecast the currently open document to XStorable type.
-            xStorable.storeToURL(path, new PropertyValue[1]); //Creating an empty PropertyValue array saves the document in the default .ods format.
+            var xStorable = (XStorable)MxDocument;
+            xStorable.storeToURL(path, new PropertyValue[1]);
         }
 
         private void AddNewSheet(string name)

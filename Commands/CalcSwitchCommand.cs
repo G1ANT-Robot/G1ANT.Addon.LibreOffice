@@ -9,13 +9,13 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Name = "id", Tooltip = "Enter the ID of the sheet to switch to.")]
-            public IntegerStructure id { get; set; } = new IntegerStructure();
+            [Argument(Name = "Id", Tooltip = "Enter the ID of the sheet to switch to.")]
+            public IntegerStructure Id { get; set; }
         }
 
         public void Execute(Arguments arguments)
         {
-           CalcManager.Instance.SwitchCalc(arguments.id.Value);
+           CalcManager.Instance.SwitchCalc(arguments.Id.Value);
         }
     }
 }

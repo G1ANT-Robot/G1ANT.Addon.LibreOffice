@@ -9,7 +9,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Name = "text", Tooltip = "Enter the text to be insert", Required = true)]
+            [Argument(Name = "text", Tooltip = "Enter the text to be inserted", Required = true)]
             public TextStructure text { get; set; } = new TextStructure();
 
             [Argument(Name = "append", Tooltip = "True if you want to append the text, false to replace text")]

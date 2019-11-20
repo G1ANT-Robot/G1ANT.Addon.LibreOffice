@@ -10,7 +10,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "colnumber", Required = true, Tooltip = "Enter the column number")]
-            public IntegerStructure ColNumber { get; set; } = new IntegerStructure();
+            public IntegerStructure ColNumber { get; set; }
         }
         public void Execute(Arguments arguments)
         {

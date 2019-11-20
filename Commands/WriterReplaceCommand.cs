@@ -9,8 +9,8 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Name = "word", Tooltip = "Enter the word to replace", Required = true)]
-            public TextStructure word { get; set; } = new TextStructure();
+            [Argument(Name = "text", Tooltip = "Enter the word to replace", Required = true)]
+            public TextStructure text { get; set; } = new TextStructure();
 
             [Argument(Name = "replacewith", Tooltip = "Enter the word to replace with", Required = true)]
             public TextStructure ReplaceWith { get; set; } = new TextStructure();
@@ -18,7 +18,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public void Execute(Arguments arguments)
         {
-            WriterManager.Instance.CurrentWriter.ReplaceWith(arguments.word.Value, arguments.ReplaceWith.Value);
+            WriterManager.Instance.CurrentWriter.ReplaceWith(arguments.text.Value, arguments.ReplaceWith.Value);
         }
     }
 }

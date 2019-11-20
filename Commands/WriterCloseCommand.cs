@@ -9,13 +9,13 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Name = "ID", Tooltip = "Enter the ID of the Document to close", Required = true)]
-            public IntegerStructure ID { get; set; } = new IntegerStructure();
+            [Argument(Name = "Id", Tooltip = "Enter the ID of the Document to close", Required = true)]
+            public IntegerStructure Id { get; set; }
         }
 
         public void Execute(Arguments arguments)
         {
-            WriterManager.Instance.RemoveInstance(arguments.ID.Value);
+            WriterManager.Instance.RemoveInstance(arguments.Id.Value);
         }
     }
 }

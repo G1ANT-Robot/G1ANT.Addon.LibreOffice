@@ -9,7 +9,7 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Name = "rownumber", Required = true, Tooltip = "Enter the row number")]
-            public IntegerStructure RowNumber { get; set; } = new IntegerStructure();
+            public IntegerStructure RowNumber { get; set; }
         }
         public void Execute(Arguments arguments)
         {

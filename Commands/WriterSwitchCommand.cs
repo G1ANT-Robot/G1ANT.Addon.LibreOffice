@@ -9,8 +9,8 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public class Arguments : CommandArguments
         {
-            [Argument(Name = "id", Tooltip = "Enter the ID of the document to switch to", Required = true)]
-            public IntegerStructure Id { get; set; } = new IntegerStructure();
+            [Argument(Name = "Id", Tooltip = "Enter the ID of the document to switch to", Required = true)]
+            public IntegerStructure Id { get; set; }
         }
         
         public void Execute(Arguments arguments)

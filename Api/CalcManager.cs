@@ -57,8 +57,8 @@ namespace G1ANT.Addon.LibreOffice
 
         public CalcWrapper CreateInstance()
         {
-            int assignedId = GetNextId();
-            CalcWrapper wrapper = new CalcWrapper(assignedId);
+            var assignedId = GetNextId();
+            var wrapper = new CalcWrapper(assignedId);
             launchedCalcs.Add(wrapper);
             CurrentCalc = wrapper;
             return wrapper;

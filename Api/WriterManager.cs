@@ -58,8 +58,8 @@ namespace G1ANT.Addon.LibreOffice
 
         public WriterWrapper CreateInstance()
         {
-            int assignedId = GetNextId();
-            WriterWrapper wrapper = new WriterWrapper(assignedId);
+            var assignedId = GetNextId();
+            var wrapper = new WriterWrapper(assignedId);
             launchedWriters.Add(wrapper);
             currentWriter = wrapper;
             return wrapper;
@@ -67,7 +67,6 @@ namespace G1ANT.Addon.LibreOffice
 
         public void RemoveInstance(int? id = null)
         {
-
             var toRemove = GetById(id);
             if (toRemove != null)
             {

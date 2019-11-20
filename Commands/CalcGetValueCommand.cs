@@ -10,10 +10,10 @@ namespace G1ANT.Addon.LibreOffice.Commands
         public class Arguments : CommandArguments
         {
             [Argument(Required = true, Name = "colnumber", Tooltip = "Enter the column number of the cell")]
-            public IntegerStructure ColNum { get; set; } = new IntegerStructure();
+            public IntegerStructure ColNum { get; set; }
 
             [Argument(Required = true, Name = "rownumber", Tooltip = "Enter the row number of the cell")]
-            public IntegerStructure RowNum { get; set; } = new IntegerStructure();
+            public IntegerStructure RowNum { get; set; }
 
             [Argument(Tooltip = "Contains the value stored in the cell")]
             public VariableStructure Result { get; set; } = new VariableStructure("result");
@@ -21,10 +21,8 @@ namespace G1ANT.Addon.LibreOffice.Commands
 
         public void Execute(Arguments arguments)
         {
-           var calcManager = new CalcManager();
-           var result = calcManager.CurrentCalc.GetValue(arguments.ColNum.Value, arguments.RowNum.Value);
+           var result = CalcManager.Instance.CurrentCalc.GetValue(arguments.ColNum.Value, arguments.RowNum.Value);
            Scripter.Variables.SetVariableValue(arguments.Result.Value, new TextStructure(result));
-        }
-            
+        }   
     }
 }

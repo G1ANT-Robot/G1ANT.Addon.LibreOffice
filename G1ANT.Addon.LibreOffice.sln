@@ -5,6 +5,15 @@ VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "G1ANT.Addon.LibreOffice", "G1ANT.Addon.LibreOffice.csproj", "{99627C0E-3663-4979-BBAC-AC994BC1B5AA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3341B4A5-071A-43E1-8CBA-9807887E801F}"
+	ProjectSection(SolutionItems) = preProject
+		cli_basetypes.dll = cli_basetypes.dll
+		cli_cppuhelper.dll = cli_cppuhelper.dll
+		cli_oootypes.dll = cli_oootypes.dll
+		cli_ure.dll = cli_ure.dll
+		cli_uretypes.dll = cli_uretypes.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
